@@ -1,0 +1,61 @@
+# General
+.DS_Store
+*.swp
+
+# Ruby / Rails
+*.gem
+*.rbc
+*.rbenv-vars
+.rspec
+.bundle
+config/master.key
+config/credentials.yml.enc
+log/*
+tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Logs and temp files
+/log/*
+/tmp/*
+/tmp/pids/*
+!/tmp/pids/
+/tmp/storage/*
+!/tmp/storage/
+!/tmp/pids/.keep
+!/tmp/storage/.keep
+
+# Uploaded files (e.g. ActiveStorage)
+/storage/*
+!/storage/.keep
+
+# Database
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Assets and packs
+/public/assets
+/public/packs
+/public/packs-test
+/public/uploads
+
+# Node and Yarn
+node_modules/
+yarn-error.log
+
+# Byebug
+.byebug_history
+
+# Redis
+dump.rdb
+
+# Code Coverage
+coverage/
+spec/examples.txt
+
+# IDEs
+.idea/
+.vscode/
+
+# dotenv
+.env*
