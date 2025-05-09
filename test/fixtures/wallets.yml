@@ -1,0 +1,9 @@
+alice_wallet:
+  user: alice
+  balance_cents: 0
+  currency: SGD
+
+bob_wallet:
+  user: bob
+  balance_cents: 0
+  currency: SGD

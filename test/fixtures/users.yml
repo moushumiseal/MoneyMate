@@ -1,0 +1,11 @@
+alice:
+  name: Alice
+  email: alice_123@gmail.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  confirmed_at: <%= Time.current %>
+
+bob:
+  name: Bob
+  email: bob_123@gmail.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  confirmed_at: <%= Time.current %>
