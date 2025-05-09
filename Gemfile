@@ -12,7 +12,6 @@ gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 6.0'
 
-gem "factory_bot_rails"
 gem "sorbet"
 gem "sorbet-runtime"
 gem 'minitest'
@@ -42,4 +41,5 @@ end
 
 group :test do
   gem 'rails-controller-testing'
+  gem 'timecop'
 end
