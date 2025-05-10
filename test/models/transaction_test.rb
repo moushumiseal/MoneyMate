@@ -3,7 +3,12 @@ require "test_helper"
 
 class TransactionTest < ActiveSupport::TestCase
   test "should belong to a wallet" do
-    transaction = Transaction.new(transaction_type: :deposit, amount_cents: 100_00, currency: "SGD")
+    transaction = Transaction.new(
+      transaction_type: :deposit,
+      amount_cents: 100_00,
+      currency: "SGD",
+      receiver: users(:alice)  # Add receiver for deposit
+    )
     assert_not transaction.valid?
     assert_includes transaction.errors[:wallet], "must exist"
   end
@@ -15,7 +20,8 @@ class TransactionTest < ActiveSupport::TestCase
       currency: "SGD",
       wallet: wallets(:alice_wallet),
       sender: users(:alice),
-      receiver: users(:bob)
+      receiver: users(:bob),
+      receiver_wallet: wallets(:bob_wallet)  # Add receiver_wallet for transfer
     )
     assert transaction.valid?
   end
@@ -31,7 +37,8 @@ class TransactionTest < ActiveSupport::TestCase
       transaction_type: "deposit",
       amount_cents: 100_00,
       currency: "SGD",
-      wallet: wallets(:alice_wallet)
+      wallet: wallets(:alice_wallet),
+      receiver: users(:alice)  # Add receiver for deposit
     )
     assert transaction.valid?
   end

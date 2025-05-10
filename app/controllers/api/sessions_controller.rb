@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# typed: true
 
 module Api
   class SessionsController < Devise::SessionsController

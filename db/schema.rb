@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_05_09_084509) do
+ActiveRecord::Schema[7.1].define(version: 2025_05_10_051703) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,6 +31,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_09_084509) do
     t.datetime "updated_at", null: false
     t.string "currency", default: "SGD"
     t.integer "amount_cents", default: 0, null: false
+    t.bigint "receiver_wallet_id"
+    t.string "status", default: "pending"
+    t.index ["receiver_wallet_id"], name: "index_transactions_on_receiver_wallet_id"
+    t.index ["status"], name: "index_transactions_on_status"
+    t.index ["wallet_id", "receiver_wallet_id"], name: "index_transactions_on_wallet_id_and_receiver_wallet_id"
     t.index ["wallet_id"], name: "index_transactions_on_wallet_id"
   end
 
@@ -71,5 +76,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_09_084509) do
   end
 
   add_foreign_key "transactions", "wallets"
+  add_foreign_key "transactions", "wallets", column: "receiver_wallet_id"
   add_foreign_key "wallets", "users"
 end

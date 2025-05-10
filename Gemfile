@@ -19,6 +19,7 @@ gem 'pry'
 gem 'money-rails', '~> 1.15'
 gem 'devise', '~> 4.9.2'
 gem 'devise-jwt', '~> 0.10.0'
+gem 'kaminari'
 
 # Use Redis adapter to run Action Cable in production
 gem "redis", "~> 4.0"
