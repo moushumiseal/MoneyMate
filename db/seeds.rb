@@ -119,4 +119,4 @@ Transaction.create!(
   status: :completed
 )
 
-puts "qDone seeding the database!"
+puts "Done seeding the database!"
