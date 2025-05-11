@@ -23,33 +23,36 @@ users = [
     name: "John Smith",
     email: "john.smith@gmail.com",
     password: "password123",
+    password_confirmation: 'password123',
     confirmed_at: Time.current
   },
   {
     name: "Jane Doe",
     email: "janedoe85@hotmail.com",
     password: "password123",
+    password_confirmation: 'password123',
     confirmed_at: Time.current
   },
   {
     name: "Michael Johnson",
     email: "michael.johnson@example.com",
     password: "password123",
+    password_confirmation: 'password123',
     confirmed_at: Time.current
   },
   {
     name: "Emily Williams",
     email: "emily.williams2023@gmail.com",
     password: "password123",
+    password_confirmation: 'password123',
     confirmed_at: Time.current
   },
   {
     name: "Robert Brown",
     email: "robert_brown@hotmail.com",
     password: "password123",
-    confirmed_at: nil,
-    confirmation_sent_at: 1.day.ago,
-    confirmation_token: "conf_token_rb456"
+    password_confirmation: 'password123',
+    confirmed_at: Time.current
   }
 ]
 

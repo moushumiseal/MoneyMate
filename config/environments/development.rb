@@ -56,6 +56,10 @@ Rails.application.configure do
   # For Devise gem
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
+  config.action_dispatch.default_headers = {
+    'Content-Type' => 'application/json'
+  }
+
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

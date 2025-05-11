@@ -316,12 +316,13 @@ Devise.setup do |config|
 
   # JWT configuration
   config.jwt do |jwt|
-    jwt.secret = Rails.application.credentials.secret_key_base
+    jwt.secret = ENV['DEVISE_JWT_SECRET_KEY'] || '386ee73c115af601d9c5c4363ee6d66fbd6fe23997800d3ba2cd4484fda88a1609887b9a2d87c196098d95bee33766ccef049946220e7b55504695091f493d7a'
     jwt.dispatch_requests = [
-      ['POST', %r{^/api/login$}]
+      ['POST', %r{^/money_mate/api/users/sign_in$}],
+      ['POST', %r{^/money_mate/api/users$}]
     ]
     jwt.revocation_requests = [
-      ['DELETE', %r{^/api/logout$}]
+      ['DELETE', %r{^/money_mate/api/users/sign_out$}]
     ]
     jwt.expiration_time = 1.day.to_i
   end

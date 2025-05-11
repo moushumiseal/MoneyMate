@@ -78,7 +78,7 @@ Base URL: `/money_mate/api`
 
 ### Authentication
 
-- **POST** `/users/sign_up` - Register new user
+- **POST** `/users` - Register new user
 - **POST** `/users/sign_in` - Login user
 - **DELETE** `/users/sign_out` - Logout user
 
@@ -130,7 +130,7 @@ Base URL: `/money_mate/api`
 1. **Register a User**
    - Method: `POST`
    - URL: `{{base_url}}/users`
-   - Headers: `Content-Type: application/json`
+   - Headers: `Content-Type: application/json`, `Accept: application/json`
    - Body:
      ```json
      {
@@ -151,18 +151,12 @@ Base URL: `/money_mate/api`
      ```json
      {
        "user": {
-         "email": "test@example.com",
+         "email": "john.smith@gmail.com",
          "password": "password123"
        }
      }
      ```
-   - In Tests tab, add script to extract token:
-     ```javascript
-     var responseJson = pm.response.json();
-     if (responseJson.token) {
-       pm.environment.set("auth_token", responseJson.token);
-     }
-     ```
+   - Get auth token from `authorization` header.
 
 ### Testing Wallet Operations
 
@@ -179,7 +173,8 @@ For all wallet operations, add this header:
    - Body:
      ```json
      {
-       "amount": 1000.00
+       "amount": "25.00",
+       "currency": "SGD"
      }
      ```
 

@@ -5,38 +5,49 @@ module Api
   class SessionsController < Devise::SessionsController
     extend T::Sig
 
+
     respond_to :json
-    skip_before_action :verify_authenticity_token
+
+    def create
+      Rails.logger.info "SessionsController#create called with params: #{params.inspect}"
+
+      # Find user and authenticate manually
+      user = User.find_by(email: params.dig(:user, :email))
+
+      unless user
+        Rails.logger.info "User not found with email: #{params.dig(:user, :email)}"
+        return render json: { error: "Invalid email or password" }, status: :unauthorized
+      end
+
+      unless user.valid_password?(params.dig(:user, :password))
+        Rails.logger.info "Invalid password for user: #{user.email}"
+        return render json: { error: "Invalid email or password" }, status: :unauthorized
+      end
+
+      # If we get here, credentials are valid
+      Rails.logger.info "Credentials valid for user: #{user.email}"
+
+      # Manually sign in the user
+      sign_in user
+
+      # Return success response
+      render json: {
+        message: "Logged in successfully",
+        user: {
+          id: user.id,
+          email: user.email
+        }
+      }, status: :ok
+    end
 
     private
 
-    sig { returns(Hash) }
     def respond_with(resource, _opts = {})
-      render json: {
-        status: { code: 200, message: 'Logged in successfully' },
-        data: {
-          user: {
-            id: resource.id,
-            email: resource.email
-          }
-        }
-      }
+      render json: { message: 'Logged in.', user: resource }, status: :ok
     end
 
-    sig { returns(Hash) }
     def respond_to_on_destroy
-      if current_user
-        render json: {
-          status: 200,
-          message: 'Logged out successfully'
-        }
-      else
-        render json: {
-          status: 401,
-          message: 'Couldn\'t find an active session.'
-        }
-      end
+      render json: { message: 'Logged out.' }, status: :ok
     end
   end
 end
-
