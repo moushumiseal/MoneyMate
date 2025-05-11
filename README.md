@@ -120,7 +120,7 @@ Base URL: `/money_mate/api`
 ### Setup Postman Collection
 
 1. Download [Postman](https://www.postman.com/downloads/)
-2. Create a new collection named "MoneyMate API". You can also import the `MoneyMate API.postman_collection.json` file from the repo into post for a quick set-up.
+2. Create a new collection named "MoneyMate API". You can also import the `MoneyMate API.postman_collection.json` file from the repo into Postman for a quick set-up.
 3. Set up environment variables:
    - `base_url`: `http://localhost:3000/money_mate/api`
    - `auth_token`: (this will be populated after login)
@@ -293,6 +293,8 @@ Each action includes error handling for:
 - Invalid amount values (negative or zero)
 - Insufficient funds
 - Invalid transaction types (e.g., transfers to self)
+
+The `UserController` handles viewing given user's balance and transaction history.
 
 Authorization is handled by the `authorize_wallet_access!` method, which ensures users can only operate on their own wallets.
 
