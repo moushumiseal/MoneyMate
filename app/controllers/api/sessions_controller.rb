@@ -6,8 +6,6 @@ module Api
     extend T::Sig
 
     respond_to :json
-
-    # Skip CSRF protection for API
     skip_before_action :verify_authenticity_token
 
     private

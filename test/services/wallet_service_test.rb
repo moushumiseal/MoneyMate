@@ -27,7 +27,7 @@ class WalletServiceTest < ActiveSupport::TestCase
     end
 
     transaction = Transaction.last
-    assert_equal 'deposit', transaction.transaction_type
+    assert_equal 'credit', transaction.transaction_type
     assert_equal 5000, transaction.amount_cents
     assert_equal @alice.id, transaction.receiver_id
     assert_nil transaction.sender_id
@@ -76,7 +76,7 @@ class WalletServiceTest < ActiveSupport::TestCase
     end
 
     transaction = Transaction.last
-    assert_equal 'withdraw', transaction.transaction_type
+    assert_equal 'debit', transaction.transaction_type
     assert_equal 3000, transaction.amount_cents
     assert_equal @alice.id, transaction.sender_id
     assert_nil transaction.receiver_id
@@ -136,20 +136,32 @@ class WalletServiceTest < ActiveSupport::TestCase
     assert_equal Money.new(3000, 'SGD'), @bob_wallet.reload.balance
   end
 
-  test "transfer creates only one transaction record of type transfer" do
+  test "transfer creates two transaction records" do
     WalletService.deposit(@alice_wallet, Money.new(10000, 'SGD'))
 
-    assert_difference -> { Transaction.where(transaction_type: 'transfer').count }, 1 do
+    assert_difference -> { Transaction.count }, 2 do
       WalletService.transfer(@alice_wallet, @bob_wallet, Money.new(3000, 'SGD'))
     end
 
-    transaction = Transaction.where(transaction_type: 'transfer').last
-    assert_equal 'transfer', transaction.transaction_type
-    assert_equal 3000, transaction.amount_cents
-    assert_equal @alice.id, transaction.sender_id
-    assert_equal @bob.id, transaction.receiver_id
-    assert_equal @bob_wallet.id, transaction.receiver_wallet_id
-    assert_equal 'SGD', transaction.currency
+    # Check debit transaction (sender's side)
+    debit_txn = Transaction.where(transaction_type: 'debit').last
+    assert_equal 'debit', debit_txn.transaction_type
+    assert_equal 3000, debit_txn.amount_cents
+    assert_equal @alice.id, debit_txn.sender_id
+    assert_equal @bob.id, debit_txn.receiver_id
+    assert_equal @bob_wallet.id, debit_txn.receiver_wallet_id
+    assert_equal 'SGD', debit_txn.currency
+    assert_equal @alice_wallet.id, debit_txn.wallet_id
+
+    # Check credit transaction (receiver's side)
+    credit_txn = Transaction.where(transaction_type: 'credit').last
+    assert_equal 'credit', credit_txn.transaction_type
+    assert_equal 3000, credit_txn.amount_cents
+    assert_equal @alice.id, credit_txn.sender_id
+    assert_equal @bob.id, credit_txn.receiver_id
+    assert_equal @alice_wallet.id, credit_txn.receiver_wallet_id
+    assert_equal 'SGD', credit_txn.currency
+    assert_equal @bob_wallet.id, credit_txn.wallet_id
   end
 
   test "transfer with negative amount raises error" do

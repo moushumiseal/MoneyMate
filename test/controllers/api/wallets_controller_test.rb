@@ -21,6 +21,11 @@ module Api
       assert_equal "S$100.00", json["balance"]
       assert_equal 100.0, json["amount_numeric"]
       assert_equal "SGD", json["currency"]
+
+      txn = @wallet.transactions.last
+      assert_equal "credit", txn.transaction_type
+      assert_equal 100_00, txn.amount_cents
+      assert_nil txn.sender_id
     end
 
     test "should not allow deposit of negative amounts" do
@@ -46,6 +51,11 @@ module Api
 
       json = JSON.parse(response.body)
       assert_equal "S$100.00", json["balance"]
+
+      txn = @wallet.transactions.last
+      assert_equal "debit", txn.transaction_type
+      assert_equal 100_00, txn.amount_cents
+      assert_nil txn.receiver_id
     end
 
     test "should not withdraw money if insufficient balance" do
@@ -70,12 +80,19 @@ module Api
       assert_equal 150.0, @wallet.reload.balance.to_f
       assert_equal 150.0, bob.wallet.reload.balance.to_f
 
-      # Check transaction was created correctly
-      txn = @wallet.transactions.where(transaction_type: "transfer").last
-      assert_equal @user.id, txn.sender_id
-      assert_equal bob.id, txn.receiver_id
-      assert_equal bob.wallet.id, txn.receiver_wallet_id
-      assert_equal 150_00, txn.amount_cents
+      # Check sender's debit transaction
+      debit_txn = @wallet.transactions.where(transaction_type: "debit").last
+      assert_equal @user.id, debit_txn.sender_id
+      assert_equal bob.id, debit_txn.receiver_id
+      assert_equal bob.wallet.id, debit_txn.receiver_wallet_id
+      assert_equal 150_00, debit_txn.amount_cents
+
+      # Check receiver's credit transaction
+      credit_txn = bob.wallet.transactions.where(transaction_type: "credit").last
+      assert_equal @user.id, credit_txn.sender_id
+      assert_equal bob.id, credit_txn.receiver_id
+      assert_equal @wallet.id, credit_txn.receiver_wallet_id
+      assert_equal 150_00, credit_txn.amount_cents
     end
 
     test "should not allow unauthorized access to another user's wallet" do

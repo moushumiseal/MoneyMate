@@ -84,7 +84,7 @@ end
 
 puts "Creating sample transactions..."
 Transaction.create!(
-  transaction_type: "deposit",
+  transaction_type: "credit",
   receiver: created_users[0],
   wallet: created_users[0].wallet,
   amount_cents: 5000,
@@ -92,7 +92,7 @@ Transaction.create!(
 )
 
 Transaction.create!(
-  transaction_type: "withdraw",
+  transaction_type: "debit",
   sender: created_users[1],
   wallet: created_users[1].wallet,
   amount_cents: 2000,
@@ -100,7 +100,7 @@ Transaction.create!(
 )
 
 Transaction.create!(
-  transaction_type: "transfer",
+  transaction_type: "debit",
   sender: created_users[2],
   receiver: created_users[3],
   wallet: created_users[2].wallet,
@@ -110,7 +110,27 @@ Transaction.create!(
 )
 
 Transaction.create!(
-  transaction_type: "transfer",
+  transaction_type: "credit",
+  sender: created_users[2],
+  receiver: created_users[3],
+  wallet: created_users[2].wallet,
+  receiver_wallet: created_users[3].wallet,
+  amount_cents: 1000,
+  status: :completed
+)
+
+Transaction.create!(
+  transaction_type: "debit",
+  sender: created_users[0],
+  receiver: created_users[1],
+  wallet: created_users[0].wallet,
+  receiver_wallet: created_users[1].wallet,
+  amount_cents: 750,
+  status: :completed
+)
+
+Transaction.create!(
+  transaction_type: "credit",
   sender: created_users[0],
   receiver: created_users[1],
   wallet: created_users[0].wallet,

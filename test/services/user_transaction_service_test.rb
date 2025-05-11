@@ -10,14 +10,14 @@ class UserTransactionServiceTest < ActiveSupport::TestCase
     @frozen_time = Time.zone.local(2025, 5, 9, 12, 0, 0)
     Timecop.freeze(@frozen_time) do
       @wallet.transactions.create!(
-        transaction_type: :deposit,
+        transaction_type: :credit,
         amount_cents: 1000,
         currency: "SGD",
         receiver: @user
       )
 
       @wallet.transactions.create!(
-        transaction_type: :withdraw,
+        transaction_type: :debit,
         amount_cents: 500,
         currency: "SGD",
         sender: @user
@@ -42,11 +42,20 @@ class UserTransactionServiceTest < ActiveSupport::TestCase
     txn = result[:transactions].first
     assert_includes txn.keys, :id
     assert_includes txn.keys, :type
+    assert_includes txn.keys, :display_type
     assert_includes txn.keys, :amount
     assert_includes txn.keys, :amount_numeric
     assert_includes txn.keys, :currency
     assert_includes txn.keys, :created_at
+
+    # Test transaction types and display types
+    credit_txn = result[:transactions].find { |t| t[:type] == "credit" }
+    debit_txn = result[:transactions].find { |t| t[:type] == "debit" }
+
+    assert_equal "deposit", credit_txn[:display_type]
+    assert_equal "withdraw", debit_txn[:display_type]
   end
+
 
   test "respects per_page limit" do
     result = @service.paginated_transactions(page: 1, per_page: 1)

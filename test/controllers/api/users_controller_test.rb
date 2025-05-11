@@ -11,14 +11,14 @@ module Api
       @frozen_time = Time.zone.local(2025, 5, 9, 12, 0, 0)
       Timecop.freeze(@frozen_time) do
         @wallet.transactions.create!(
-          transaction_type: :deposit,
+          transaction_type: :credit,
           amount_cents: 1000,
           currency: "SGD",
           receiver: @user
         )
 
         @wallet.transactions.create!(
-          transaction_type: :withdraw,
+          transaction_type: :debit,
           amount_cents: 500,
           currency: "SGD",
           sender: @user
@@ -52,7 +52,6 @@ module Api
       assert_includes json["pagination"].keys, "total_pages"
       assert_includes json["pagination"].keys, "total_count"
 
-      # Check transactions array
       transactions = json["transactions"]
       assert_kind_of Array, transactions
       assert_equal 2, transactions.size
@@ -68,11 +67,10 @@ module Api
         assert_includes txn.keys, "created_at"
         assert_includes txn.keys, "status"
 
-        # Modified assertions to match our transaction types
-        if txn["type"] == "deposit"
+        if txn["type"] == "credit"
           assert_nil txn["sender"]
           assert_equal @user.email, txn["receiver"]
-        elsif txn["type"] == "withdraw"
+        elsif txn["type"] == "debit"
           assert_equal @user.email, txn["sender"]
           assert_nil txn["receiver"]
         end
