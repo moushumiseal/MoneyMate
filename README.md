@@ -120,7 +120,7 @@ Base URL: `/money_mate/api`
 ### Setup Postman Collection
 
 1. Download [Postman](https://www.postman.com/downloads/)
-2. Create a new collection named "MoneyMate API"
+2. Create a new collection named "MoneyMate API". You can also import the `MoneyMate API.postman_collection.json` file from the repo into post for a quick set-up.
 3. Set up environment variables:
    - `base_url`: `http://localhost:3000/money_mate/api`
    - `auth_token`: (this will be populated after login)
@@ -173,7 +173,7 @@ For all wallet operations, add this header:
    - Body:
      ```json
      {
-       "amount": "25.00",
+       "amount": "125.00",
        "currency": "SGD"
      }
      ```
@@ -188,7 +188,8 @@ For all wallet operations, add this header:
    - Body:
      ```json
      {
-       "amount": 500.00
+       "amount": 25.00,
+       "currency": "SGD"
      }
      ```
 
@@ -202,7 +203,8 @@ For all wallet operations, add this header:
    - Body:
      ```json
      {
-       "amount": 250.00,
+       "amount": 150.00,
+       "currency": "SGD",
        "receiver_id": 2
      }
      ```
